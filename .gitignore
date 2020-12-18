@@ -61,9 +61,15 @@ public
 # Mac files
 .DS_Store
 
-# Yarn
-yarn-error.log
-.pnp/
-.pnp.js
-# Yarn Integrity file
-.yarn-integrity
+# Yarn files
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+#vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
