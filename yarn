@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+'use strict';
+
+const path = require('path');
+const fs = require('fs');
+
+const context = path.resolve(__dirname);
+const Cache = {};
+
+require(yarnBin());
+
+function yarnBin() {
+  const relative = yarnrcVar(/^\s*yarnPath:\s+(.*)$/);
+  if (!relative) throw new Error("yarnPath configuration can't be found.");
+
+  return path.join(context, relative);
+}
+
+function yarnrcVar(pattern) {
+  const lines = yarnrcLines();
+  for (const line of lines) {
+    const match = line.match(pattern);
+    if (match) return cleanValue(match[1]);
+  }
+}
+
+function yarnrcLines() {
+  if (!Cache.yarnrcLines) {
+    const yarrncFile = path.join(context, '.yarnrc.yml');
+    const yarnrc = fs.readFileSync(yarrncFile).toString('utf-8');
+    Cache.yarnrcLines = yarnrc.split(/[\r\n]+/);
+  }
+
+  return Cache.yarnrcLines;
+}
+
+function cleanValue(dirty = '') {
+  let s = (dirty || '').trim();
+
+  if (s.includes(' #')) throw new Error("Value can't contains #");
+  if (s.charAt(0) === "'" || s.charAt(0) === '"') throw new Error('Unsupported quoted string.');
+
+  return s;
+}
