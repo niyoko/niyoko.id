@@ -1,0 +1,11 @@
+base_url = "https://niyoko.id"
+compile_sass = true
+build_search_index = false
+theme = "tabi"
+title = "niyoko.id"
+
+[markdown]
+highlight_code = true
+highlight_theme = "css"
+
+[extra]
